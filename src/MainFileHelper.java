@@ -1,4 +1,5 @@
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -6,45 +7,40 @@ import java.util.logging.Logger;
 
 public class MainFileHelper {
     private static final Logger LOG = Logger.getLogger(MainFileHelper.class.getName());
-    private  static File sourseDir;
-    private  static List<File> targetDirList = new ArrayList<>();
-    private  static List<File> filesToCopy = new ArrayList<>();
+    private static File sourseDir;
+    private static List<File> targetDirList = new ArrayList<>();
+    private static List<File> filesToCopy = new ArrayList<>();
 
 
     public static void main(String... args) throws IOException {
-        //System.setIn(new ByteArrayInputStream(new String("C:\\Users\\Maxim\\Desktop\\").getBytes()));
         conversation();
         makeFilesToCopy();
-        for(File file :filesToCopy){
-            for(File target:targetDirList){
-                String newFile = target.getAbsolutePath()+file.getName();
-                System.out.println(newFile);
+        for (File file : filesToCopy) {
+            for (File target : targetDirList) {
+                File newFile = new File(target.getAbsolutePath() + "\\" + file.getName());
+
+                StringBuilder oldEpsSB = new StringBuilder(file.getAbsolutePath());
+                String oldEpsFile = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
+                StringBuilder newEpsSB = new StringBuilder(newFile.getAbsolutePath());
+                String newEpsFile = newEpsSB.replace(newEpsSB.length() - 3, newEpsSB.length(), "eps").toString();
+
+
+                copyFile(file, newFile);
+                copyFile(new File(oldEpsFile), new File(newEpsFile));
 
 
 
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
-    public static void makeFilesToCopy() throws IOException{
+    public static void makeFilesToCopy() throws IOException {
         List<File> files = Arrays.asList(sourseDir.listFiles());
-        for(File file:files){
-            if(!file.isDirectory()){
+        for (File file : files) {
+            if (!file.isDirectory()&&file.getName().endsWith(".jpg")) {
                 String s = exifReader(file.getAbsolutePath());
                 s = s.replaceAll("Keywords \\s+ : ", "").trim();
-                if(!s.isEmpty()){
+                if (!s.isEmpty()) {
                     filesToCopy.add(file);
                 }
             }
@@ -53,7 +49,7 @@ public class MainFileHelper {
 
     }
 
-    public static void conversation() throws IOException{
+    public static void conversation() throws IOException {
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String dir = "";
@@ -71,17 +67,15 @@ public class MainFileHelper {
 
 
         check = true;
-
         do {
             String tmp = "";
             System.out.println("Введите директорию, в которую необходимо скопировать файлы или НЕТ");
             tmp = reader.readLine();
             File targetDir = new File(tmp);
-            if ((!tmp.isEmpty()) && (!(tmp.equals("НЕТ")))&&targetDir.isDirectory()) {
+            if ((!tmp.isEmpty()) && (!(tmp.equals("НЕТ"))) && targetDir.isDirectory()) {
 
                 targetDirList.add(targetDir);
                 System.out.println("Целевая дирктория принята!");
-                check = false;
 
             } else if (tmp.isEmpty() || targetDirList.size() < 1) {
                 System.out.println("Должна быть хотя бы одна целевая директория");
@@ -91,9 +85,8 @@ public class MainFileHelper {
                     System.out.println(s.getAbsolutePath());
                 }
                 check = false;
-            }else{
-                System.out.println(targetDir.getAbsolutePath()+" - это не директория!");
-                check = false;
+            } else {
+                System.out.println(targetDir.getAbsolutePath() + " - это не директория!");
             }
         } while (check);
 
@@ -144,20 +137,18 @@ public class MainFileHelper {
     }
 
     private static void copyFile(File source, File dest) throws IOException {
-        InputStream is = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
+
+        System.out.println("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
+
+
+        try (FileChannel ic = new FileInputStream(source).getChannel(); FileChannel oc = new FileOutputStream(dest).getChannel()) {
+            ic.transferTo(0, ic.size(), oc);
+
         } finally {
-            is.close();
-            os.close();
+            System.out.println("Данные успешно скопированы!");
         }
+
+
     }
 
 
