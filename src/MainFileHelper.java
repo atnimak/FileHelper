@@ -67,10 +67,11 @@ public class MainFileHelper {
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String dir = "";
+        System.out.println("\"Привет, это приложение скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+                "При необходимости удалит исходные файлы. Из-за особенностей коммандной строки Windows программа не умеет\n" +
+                "работать с кирилицей, обратите внимание, чтобы все символы в имени файла и адресе были файлами латинского алфавита");
         do {
-            System.out.println("Привет, это приложение скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
-                    "При необходимости удалит искходные файлы. \n" +
-                    "Введите директорию, файлы из которой необходимо обработать");
+            System.out.println("Введите директорию, файлы из которой необходимо обработать");
             dir = reader.readLine();
             sourseDir = new File(dir);
             if (!sourseDir.isDirectory() && !sourseDir.exists()) {
@@ -88,23 +89,23 @@ public class MainFileHelper {
         check = true;
         do {
             String tmp = "";
-            System.out.println("Введите директорию, в которую необходимо скопировать файлы или НЕТ");
+            System.out.println("Введите директорию, в которую необходимо скопировать файлы или NO");
             tmp = reader.readLine();
             File targetDir = new File(tmp);
-            if ((!tmp.isEmpty()) && (!(tmp.equals("НЕТ"))) && targetDir.isDirectory()) {
+            if ((!tmp.isEmpty()) && (!(tmp.equals("NO"))) && targetDir.isDirectory()) {
                 targetDirList.add(targetDir);
                 System.out.println("Целевая дирктория принята!");
             } else if(tmp.isEmpty()){
                 System.out.println("Адрес директории не может быть пустым");
-            } else if ((tmp.equals("НЕТ"))&& targetDirList.size() < 1) {
+            } else if ((tmp.equals("NO"))&& targetDirList.size() < 1) {
                 System.out.println("Должна быть хотя бы одна целевая директория");
-            } else if ((tmp.equals("НЕТ")) && targetDirList.size() > 1) {
+            } else if ((tmp.equals("NO")) && targetDirList.size() > 1) {
                 System.out.println("Файлы из директории " + dir + " будут скопированы в директории: ");
                 for (File s : targetDirList) {
                     System.out.println(s.getAbsolutePath());
                 }
                 check = false;
-            } else if((!tmp.isEmpty()) && (!(tmp.equals("НЕТ"))) && (!targetDir.isDirectory())) {
+            } else if((!tmp.isEmpty()) && (!(tmp.equals("NO"))) && (!targetDir.isDirectory())) {
                 System.out.println(targetDir.getAbsolutePath() + " - это не директория!");
             }else {
                 System.out.println("Что-то пошло не так. Проверьте путь к директории, существует ли директория\n" +
@@ -115,18 +116,18 @@ public class MainFileHelper {
         check = true;
         String delete = "";
         do {
-            System.out.println("Удалить файлы из исходной аудитории после копирования? ДА/НЕТ");
+            System.out.println("Удалить файлы из исходной аудитории после копирования? YES/NO");
             delete = reader.readLine();
-            if (delete.equals("ДА")) {
+            if (delete.equals("YES")) {
                 del = true;
                 System.out.println("Файлы из исходной директории будут удалены!");
                 check = false;
-            } else if (delete.equals("НЕТ")) {
+            } else if (delete.equals("NO")) {
                 del = false;
                 System.out.println("Файлы из исходной директории удалены не будут");
                 check = false;
             }else {
-                System.out.println("Ответ не принят. Просто введите один из вариантов ДА/НЕТ");
+                System.out.println("Ответ не принят. Просто введите один из вариантов YES/NO");
             }
         } while (check);
     }
