@@ -10,28 +10,42 @@ public class MainFileHelper {
     private static File sourseDir;
     private static List<File> targetDirList = new ArrayList<>();
     private static List<File> filesToCopy = new ArrayList<>();
+    private static List<File> filesToDelete = new ArrayList<>();
+    private static boolean del = false;
 
 
     public static void main(String... args) throws IOException {
         conversation();
         makeFilesToCopy();
-        for (File file : filesToCopy) {
+        for (File oldJpgFile : filesToCopy) {
             for (File target : targetDirList) {
-                File newFile = new File(target.getAbsolutePath() + "\\" + file.getName());
+                File newJpgFile = new File(target.getAbsolutePath() + "\\" + oldJpgFile.getName());
 
-                StringBuilder oldEpsSB = new StringBuilder(file.getAbsolutePath());
-                String oldEpsFile = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
-                StringBuilder newEpsSB = new StringBuilder(newFile.getAbsolutePath());
-                String newEpsFile = newEpsSB.replace(newEpsSB.length() - 3, newEpsSB.length(), "eps").toString();
-
-
-                copyFile(file, newFile);
-                copyFile(new File(oldEpsFile), new File(newEpsFile));
+                StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
+                String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
+                File oldEpsFile = new File(oldEps);
+                StringBuilder newEpsSB = new StringBuilder(newJpgFile.getAbsolutePath());
+                String newEps = newEpsSB.replace(newEpsSB.length() - 3, newEpsSB.length(), "eps").toString();
+                File newEpsFile = new File(newEps);
 
 
-
+                copyFile(oldJpgFile, newJpgFile);
+                copyFile(oldEpsFile, newEpsFile);
+                if(del){
+                    filesToDelete.add(oldEpsFile);
+                    filesToDelete.add(oldJpgFile);
+                }
             }
         }
+        if(del){
+            for(File file:filesToDelete){
+                deleteFile(file);
+            }
+        }
+
+
+        System.out.println("Похоже все операции проведены!");
+
     }
 
     public static void makeFilesToCopy() throws IOException {
@@ -54,7 +68,9 @@ public class MainFileHelper {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String dir = "";
         do {
-            System.out.println("Введите директорию, файлы из которой необходимо обработать");
+            System.out.println("Привет, это приложение скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+                    "При необходимости удалит искходные файлы. \n" +
+                    "Введите директорию, файлы из которой необходимо обработать");
             dir = reader.readLine();
             sourseDir = new File(dir);
             if (!sourseDir.isDirectory() && !sourseDir.exists()) {
@@ -62,6 +78,9 @@ public class MainFileHelper {
             } else if (sourseDir.isDirectory() && sourseDir.exists()) {
                 System.out.println("Директория принята!");
                 check = false;
+            }else{
+                System.out.println("Что-то пошло не так. Проверьте путь к директории, существует ли директория\n" +
+                        " и есть ли к ней доступ");
             }
         } while (check);
 
@@ -73,27 +92,28 @@ public class MainFileHelper {
             tmp = reader.readLine();
             File targetDir = new File(tmp);
             if ((!tmp.isEmpty()) && (!(tmp.equals("НЕТ"))) && targetDir.isDirectory()) {
-
                 targetDirList.add(targetDir);
                 System.out.println("Целевая дирктория принята!");
-
-            } else if (tmp.isEmpty() || targetDirList.size() < 1) {
+            } else if(tmp.isEmpty()){
+                System.out.println("Адрес директории не может быть пустым");
+            } else if ((tmp.equals("НЕТ"))&& targetDirList.size() < 1) {
                 System.out.println("Должна быть хотя бы одна целевая директория");
-            } else if (tmp.isEmpty() || tmp.equals("НЕТ") && targetDirList.size() > 1) {
+            } else if ((tmp.equals("НЕТ")) && targetDirList.size() > 1) {
                 System.out.println("Файлы из директории " + dir + " будут скопированы в директории: ");
                 for (File s : targetDirList) {
                     System.out.println(s.getAbsolutePath());
                 }
                 check = false;
-            } else {
+            } else if((!tmp.isEmpty()) && (!(tmp.equals("НЕТ"))) && (!targetDir.isDirectory())) {
                 System.out.println(targetDir.getAbsolutePath() + " - это не директория!");
+            }else {
+                System.out.println("Что-то пошло не так. Проверьте путь к директории, существует ли директория\n" +
+                        " и есть ли к ней доступ");
             }
         } while (check);
 
         check = true;
         String delete = "";
-
-        boolean del = false;
         do {
             System.out.println("Удалить файлы из исходной аудитории после копирования? ДА/НЕТ");
             delete = reader.readLine();
@@ -105,6 +125,8 @@ public class MainFileHelper {
                 del = false;
                 System.out.println("Файлы из исходной директории удалены не будут");
                 check = false;
+            }else {
+                System.out.println("Ответ не принят. Просто введите один из вариантов ДА/НЕТ");
             }
         } while (check);
     }
@@ -143,13 +165,18 @@ public class MainFileHelper {
 
         try (FileChannel ic = new FileInputStream(source).getChannel(); FileChannel oc = new FileOutputStream(dest).getChannel()) {
             ic.transferTo(0, ic.size(), oc);
-
-        } finally {
             System.out.println("Данные успешно скопированы!");
+
+        } catch (Exception e){
+            System.out.println("Похоже что-то пошло не так");
+        }finally {
         }
 
 
     }
 
-
+    private static void deleteFile(File file) throws IOException {
+        file.delete();
+        System.out.println("Удаляен файл " +file.getAbsolutePath() );
+    }
 }
