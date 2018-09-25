@@ -8,9 +8,9 @@ import java.util.logging.Logger;
 public class MainFileHelper {
     private static final Logger LOG = Logger.getLogger(MainFileHelper.class.getName());
     private static File sourceDir;
-    private static List<File> targetDirList = new ArrayList<>();
-    private static List<File> filesToCopy = new ArrayList<>();
-    private static List<File> filesToDelete = new ArrayList<>();
+    private static List<File> targetDirList;
+    private static List<File> filesToCopy;
+    private static List<File> filesToDelete;
     private static boolean del = false;
     private static boolean running = true;
 
@@ -26,6 +26,9 @@ public class MainFileHelper {
                 "Из-за особенностей коммандной строки Windows программа не умеет работать с кирилицей,\n" +
                 "обратите внимание, чтобы все символы в имени файла и адресе были цифрами или символами латинского алфавита\n");
         do {
+            targetDirList = new ArrayList<>();
+            filesToCopy = new ArrayList<>();
+            filesToDelete = new ArrayList<>();
 
             do {
                 System.out.println("Введите директорию, файлы из которой необходимо обработать");
@@ -92,16 +95,23 @@ public class MainFileHelper {
             makeFilesToCopy();
             doOperations();
 
-            tmp = "";
-            System.out.println("Хотите еще что-нибудь сделать? YES/EXIT");
-            tmp = reader.readLine();
-            if (tmp.equals("YES")) {
-                running = true;
-            } else if (tmp.equals("EXIT")) {
-                running = false;
-            } else {
-                System.out.println("Ответ не принят. Просто введите один из вариантов YES/NO");
-            }
+            check=true;
+            do{
+                tmp = "";
+                System.out.println("Хотите еще что-нибудь сделать? YES/EXIT");
+                tmp = reader.readLine();
+                if (tmp.equals("YES")) {
+                    running = true;
+                    check=false;
+                } else if (tmp.equals("EXIT")) {
+                    running = false;
+                    check=false;
+                } else {
+                    System.out.println("Ответ не принят. Просто введите один из вариантов YES/EXIT");
+                }
+
+            }while (check);
+
 
 
         } while (running);
