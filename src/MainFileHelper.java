@@ -165,7 +165,7 @@ public class MainFileHelper {
 
     public static String exifReader(String fileName) throws IOException {
         Runtime rt = Runtime.getRuntime();
-        String[] commands = {"exiftool", "-keywords", fileName};
+        String[] commands = {"exiftool", "-XPkeywords", fileName};
         Process proc = rt.exec(commands);
 
         BufferedReader stdInput = new BufferedReader(new
