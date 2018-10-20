@@ -95,23 +95,22 @@ public class MainFileHelper {
             makeFilesToCopy();
             doOperations();
 
-            check=true;
-            do{
+            check = true;
+            do {
                 tmp = "";
                 System.out.println("Хотите еще что-нибудь сделать? YES/EXIT");
                 tmp = reader.readLine();
                 if (tmp.equals("YES")) {
                     running = true;
-                    check=false;
+                    check = false;
                 } else if (tmp.equals("EXIT")) {
                     running = false;
-                    check=false;
+                    check = false;
                 } else {
                     System.out.println("Ответ не принят. Просто введите один из вариантов YES/EXIT");
                 }
 
-            }while (check);
-
+            } while (check);
 
 
         } while (running);
@@ -120,23 +119,22 @@ public class MainFileHelper {
 
     public static void doOperations() {
         for (File oldJpgFile : filesToCopy) {
+            StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
+            String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
+            File oldEpsFile = new File(oldEps);
             for (File target : targetDirList) {
                 File newJpgFile = new File(target.getAbsolutePath() + "\\" + oldJpgFile.getName());
 
-                StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
-                String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
-                File oldEpsFile = new File(oldEps);
                 StringBuilder newEpsSB = new StringBuilder(newJpgFile.getAbsolutePath());
                 String newEps = newEpsSB.replace(newEpsSB.length() - 3, newEpsSB.length(), "eps").toString();
                 File newEpsFile = new File(newEps);
 
-
                 copyFile(oldJpgFile, newJpgFile);
                 copyFile(oldEpsFile, newEpsFile);
-                if (del) {
-                    filesToDelete.add(oldEpsFile);
-                    filesToDelete.add(oldJpgFile);
-                }
+            }
+            if (del) {
+                filesToDelete.add(oldEpsFile);
+                filesToDelete.add(oldJpgFile);
             }
         }
         if (del) {
