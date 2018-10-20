@@ -153,7 +153,7 @@ public class MainFileHelper {
         for (File file : files) {
             if (!file.isDirectory() && file.getName().endsWith(".jpg")) {
                 String s = exifReader(file.getAbsolutePath());
-                s = s.replaceAll("Keywords \\s+ : ", "").trim();
+                s = s.replaceAll("XP Keywords \\s+ : ", "").trim();
                 if (!s.isEmpty()) {
                     filesToCopy.add(file);
                 }
