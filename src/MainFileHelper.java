@@ -58,7 +58,7 @@ public class MainFileHelper {
                 File targetDir = new File(tmp);
                 if ((!tmp.isEmpty()) && (!(tmp.equals("N") || tmp.equals("n"))) && targetDir.isDirectory()) {
                     targetDirList.add(targetDir);
-                    System.out.println("Целевая дирктория принята!");
+                    System.out.println("Целевая директория принята!");
                 } else if (tmp.isEmpty()) {
                     System.out.println("Адрес директории не может быть пустым");
                 } else if ((tmp.equals("N") || tmp.equals("n")) && targetDirList.size() < 1) {
@@ -154,7 +154,7 @@ public class MainFileHelper {
     public static void makeFilesToCopy() throws IOException {
         List<File> files = Arrays.asList(sourceDir.listFiles());
         for (File file : files) {
-            if (!file.isDirectory() && file.getName().endsWith(".jpg")) {
+            if (!file.isDirectory() && file.getName().toLowerCase().endsWith(".jpg")) {
                 String s = exifReader(file.getAbsolutePath());
                 s = s.replaceAll("XP Keywords \\s+ : ", "").trim();
                 if (!s.isEmpty()) {
