@@ -32,6 +32,7 @@ public class MainFileHelper {
             targetDirList = new ArrayList<>();
             filesToCopy = new ArrayList<>();
             filesToDelete = new ArrayList<>();
+            check=true;
 
             do {
                 System.out.println("Введите директорию, файлы из которой необходимо обработать");
