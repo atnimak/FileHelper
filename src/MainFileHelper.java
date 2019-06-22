@@ -1,13 +1,45 @@
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class MainFileHelper {
 
-    private static final Logger LOG = Logger.getLogger(MainFileHelper.class.getName());
+    private static final LogManager logManager = LogManager.getLogManager();
+    private static final Logger LOGGER = Logger.getLogger(MainFileHelper.class.getName());
+
+    static {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd'at'HH.mm.ss");
+        File logDir = new File("Logs");
+        if(!logDir.exists()) logDir.mkdirs();
+        File logFile = new File("Logs/log"+dateFormat.format(new Date())+".txt");
+        Properties properties = new Properties();
+
+        try (FileInputStream fis = new FileInputStream("logger.properties")){
+            properties.load(fis);
+            properties.setProperty("java.util.logging.FileHandler.pattern",logFile.getAbsolutePath());
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
+        }
+
+        try(FileOutputStream fos = new FileOutputStream("logger.properties")){
+            properties.store(fos,null);
+        } catch (FileNotFoundException e) {
+            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
+        }
+
+        try {
+            logManager.readConfiguration(new FileInputStream("logger.properties"));
+        } catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Error in loading configuration", exception);
+        }
+    }
+
     private static File sourceDir;
     private static List<File> targetDirList;
     private static List<File> filesToCopy;
@@ -16,6 +48,7 @@ public class MainFileHelper {
     private static boolean running = true;
 
     public static void main(String... args) throws IOException {
+        LOGGER.info("Старт программы. Начинаем диалог с пользователем");
 
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -119,10 +152,13 @@ public class MainFileHelper {
 
 
         } while (running);
+        LOGGER.info("Завершение работы программы");
 
     }
 
     public static void doOperations() {
+        LOGGER.info("Начато копирование файлов!  MainFileHelper doOperations");
+        System.out.println("Копируем файлы...");
         for (File oldJpgFile : filesToCopy) {
             StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
             String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
@@ -142,7 +178,10 @@ public class MainFileHelper {
                 filesToDelete.add(oldJpgFile);
             }
         }
+
         if (del) {
+            LOGGER.info("Начато удаление файлов!");
+            System.out.println("Удаляем файлы...");
             for (File file : filesToDelete) {
                 deleteFile(file);
             }
@@ -152,6 +191,8 @@ public class MainFileHelper {
     }
 
     public static void makeFilesToCopy() throws IOException {
+        LOGGER.info("Ищем файлы для копирования! MainFileHelper makeFilesToCopy");
+        System.out.println("Проверяем директорию, ищем файлы для копирования...");
         List<File> files = Arrays.asList(sourceDir.listFiles());
         for (File file : files) {
             if (!file.isDirectory() && file.getName().toLowerCase().endsWith(".jpg")) {
@@ -167,33 +208,44 @@ public class MainFileHelper {
     }
 
     public static String exifReader(String fileName) throws IOException {
+        LOGGER.info("MainFileHelper exifReader");
         return KeywordsReader.metadataReader(fileName);
     }
 
+
     private static void copyFile(File source, File dest) {
-        System.out.println("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
+        LOGGER.info("MainFileHelper copyFile");
+        LOGGER.info("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
+        //System.out.println("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
 
         try (FileChannel ic = new FileInputStream(source).getChannel(); FileChannel oc = new FileOutputStream(dest).getChannel()) {
             ic.transferTo(0, ic.size(), oc);
             if (dest.exists()) {
-                System.out.println("Данные успешно скопированы!");
+                //System.out.println("Данные успешно скопированы!");
+                LOGGER.info("Файл " + source.getAbsolutePath() + " в " + dest.getAbsolutePath() +" успешно скопирован!");
             } else {
-                System.out.println("Похоже во время копирования что-то пошло не так.");
+                LOGGER.warning("Во время копирования "+ source.getAbsolutePath() + " в " + dest.getAbsolutePath()+" произошла ошибка");
+                //System.out.println("Похоже во время копирования что-то пошло не так.");
             }
-
         } catch (IOException e) {
-            System.out.println("Похоже во время копирования что-то пошло не так.\n" +
-                    " Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");
+            LOGGER.warning("Во время копирования "+ source.getAbsolutePath() + " в " + dest.getAbsolutePath()+" произошла ошибка. \n " +
+                    "Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");
+            /*System.out.println("Похоже во время копирования что-то пошло не так.\n" +
+                    " Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");*/
         }
     }
 
     private static void deleteFile(File file) {
-        System.out.println("Удаляем файл" + file.getAbsolutePath());
+        LOGGER.info("MainFileHelper deleteFile");
+        LOGGER.info("Удаляем файл " + file.getAbsolutePath());
+        //System.out.println("Удаляем файл" + file.getAbsolutePath());
         file.delete();
         if (!file.exists()) {
-            System.out.println("Удален файл " + file.getAbsolutePath());
+            LOGGER.info("Удален файл " + file.getAbsolutePath());
+            //System.out.println("Удален файл " + file.getAbsolutePath());
         } else {
-            System.out.println("Файл" + file.getAbsolutePath() + "не удален. Что-то пошло не так.");
+            LOGGER.warning("Файл " + file.getAbsolutePath() + " не удален. Что-то пошло не так.");
+            //System.out.println("Файл" + file.getAbsolutePath() + "не удален. Что-то пошло не так.");
         }
     }
 }
