@@ -147,6 +147,41 @@ public class MainFileHelper {
 
                 copyFile(oldJpgFile, newJpgFile);
                 copyFile(oldEpsFile, newEpsFile);
+
+                switch (filesToCopy.indexOf(oldJpgFile)/filesToCopy.size()*100){
+                    case 10:
+                        System.out.print("10%...");
+                        break;
+                    case 20:
+                        System.out.print("20%...");
+                        break;
+                    case 30:
+                        System.out.print("30%...");
+                        break;
+                    case 40:
+                        System.out.print("40%...");
+                        break;
+                    case 50:
+                        System.out.print("50%...");
+                        break;
+                    case 60:
+                        System.out.print("60%...");
+                        break;
+                    case 70:
+                        System.out.print("70%...");
+                        break;
+                    case 80:
+                        System.out.print("80%...");
+                        break;
+                    case 90:
+                        System.out.print("90%...");
+                        break;
+                    case 100:
+                        System.out.print("100%...");
+                        break;
+
+                }
+
             }
             if (del) {
                 filesToDelete.add(oldEpsFile);
@@ -159,6 +194,40 @@ public class MainFileHelper {
             System.out.println("Удаляем файлы. Осталось удалить"+filesToDelete.size()+"файлов...");
             for (File file : filesToDelete) {
                 deleteFile(file);
+
+                switch (filesToDelete.indexOf(file)/filesToDelete.size()*100){
+                    case 10:
+                        System.out.print("10%...");
+                        break;
+                    case 20:
+                        System.out.print("20%...");
+                        break;
+                    case 30:
+                        System.out.print("30%...");
+                        break;
+                    case 40:
+                        System.out.print("40%...");
+                        break;
+                    case 50:
+                        System.out.print("50%...");
+                        break;
+                    case 60:
+                        System.out.print("60%...");
+                        break;
+                    case 70:
+                        System.out.print("70%...");
+                        break;
+                    case 80:
+                        System.out.print("80%...");
+                        break;
+                    case 90:
+                        System.out.print("90%...");
+                        break;
+                    case 100:
+                        System.out.print("100%...");
+                        break;
+
+                }
             }
         }
         System.out.println("Похоже все операции проведены!");
