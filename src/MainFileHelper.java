@@ -150,6 +150,7 @@ public class MainFileHelper {
 
                 copyFile(oldJpgFile, newJpgFile);
                 copyFile(oldEpsFile, newEpsFile);
+                ProgressChecker.checkProgress(oldJpgFile,filesToCopy);
 
             }
             if (del) {
@@ -157,14 +158,17 @@ public class MainFileHelper {
                 filesToDelete.add(oldJpgFile);
             }
         }
+        ProgressChecker.resetProgress();
 
         if (del) {
             LOGGER.info("Files deletion started!");
-            System.out.println("Удаляем файлы. Осталось удалить " + filesToDelete.size() * 2 + " файлов...");
+            System.out.println("\n Удаляем файлы. Осталось удалить " + filesToDelete.size() * 2 + " файлов...");
             for (File file : filesToDelete) {
+                ProgressChecker.checkProgress(file,filesToDelete);
                 deleteFile(file);
             }
         }
+        ProgressChecker.resetProgress();
         System.out.println("Похоже все операции проведены!");
         LOGGER.info("All operations are done");
 
