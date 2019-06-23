@@ -1,9 +1,8 @@
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class MainFileHelper {
@@ -12,7 +11,7 @@ public class MainFileHelper {
     private static final Logger LOGGER = Logger.getLogger(MainFileHelper.class.getName());
 
     static {
-      LogConfigurator.configureLog();
+        LogConfigurator.configureLog();
     }
 
     private static File sourceDir;
@@ -40,7 +39,7 @@ public class MainFileHelper {
             targetDirList = new ArrayList<>();
             filesToCopy = new ArrayList<>();
             filesToDelete = new ArrayList<>();
-            check=true;
+            check = true;
 
             do {
                 System.out.println("Введите директорию, файлы из которой необходимо обработать");
@@ -110,16 +109,20 @@ public class MainFileHelper {
             check = true;
             do {
                 tmp = "";
+                LOGGER.info("Asking about new tasks");
                 System.out.println("Хотите еще что-нибудь сделать? Y/N");
                 tmp = reader.readLine();
                 if (tmp.equals("Y") || tmp.equals("y")) {
+                    LOGGER.info("Got positive answer");
                     running = true;
                     check = false;
                 } else if (tmp.equals("N") || tmp.equals("n")) {
+                    LOGGER.info("Got negative answer");
                     System.out.println("Отлично поработали! Хорошего дня!");
                     running = false;
                     check = false;
                 } else {
+                    LOGGER.info("Got wrong answer");
                     System.out.println("Ответ не принят. Просто введите один из вариантов Y/N");
                 }
 
@@ -133,7 +136,7 @@ public class MainFileHelper {
 
     public static void doOperations() {
         LOGGER.info("Started copying files!  MainFileHelper doOperations");
-        System.out.println("Копируем файлы. Осталось скопировать"+filesToCopy.size()+" файлов...");
+        System.out.println("Копируем файлы. Осталось скопировать " + filesToCopy.size() * 2 + " файлов...");
         for (File oldJpgFile : filesToCopy) {
             StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
             String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
@@ -148,40 +151,6 @@ public class MainFileHelper {
                 copyFile(oldJpgFile, newJpgFile);
                 copyFile(oldEpsFile, newEpsFile);
 
-                switch (filesToCopy.indexOf(oldJpgFile)/filesToCopy.size()*100){
-                    case 10:
-                        System.out.print("10%...");
-                        break;
-                    case 20:
-                        System.out.print("20%...");
-                        break;
-                    case 30:
-                        System.out.print("30%...");
-                        break;
-                    case 40:
-                        System.out.print("40%...");
-                        break;
-                    case 50:
-                        System.out.print("50%...");
-                        break;
-                    case 60:
-                        System.out.print("60%...");
-                        break;
-                    case 70:
-                        System.out.print("70%...");
-                        break;
-                    case 80:
-                        System.out.print("80%...");
-                        break;
-                    case 90:
-                        System.out.print("90%...");
-                        break;
-                    case 100:
-                        System.out.print("100%...");
-                        break;
-
-                }
-
             }
             if (del) {
                 filesToDelete.add(oldEpsFile);
@@ -191,46 +160,13 @@ public class MainFileHelper {
 
         if (del) {
             LOGGER.info("Files deletion started!");
-            System.out.println("Удаляем файлы. Осталось удалить"+filesToDelete.size()+"файлов...");
+            System.out.println("Удаляем файлы. Осталось удалить " + filesToDelete.size() * 2 + " файлов...");
             for (File file : filesToDelete) {
                 deleteFile(file);
-
-                switch (filesToDelete.indexOf(file)/filesToDelete.size()*100){
-                    case 10:
-                        System.out.print("10%...");
-                        break;
-                    case 20:
-                        System.out.print("20%...");
-                        break;
-                    case 30:
-                        System.out.print("30%...");
-                        break;
-                    case 40:
-                        System.out.print("40%...");
-                        break;
-                    case 50:
-                        System.out.print("50%...");
-                        break;
-                    case 60:
-                        System.out.print("60%...");
-                        break;
-                    case 70:
-                        System.out.print("70%...");
-                        break;
-                    case 80:
-                        System.out.print("80%...");
-                        break;
-                    case 90:
-                        System.out.print("90%...");
-                        break;
-                    case 100:
-                        System.out.print("100%...");
-                        break;
-
-                }
             }
         }
         System.out.println("Похоже все операции проведены!");
+        LOGGER.info("All operations are done");
 
     }
 
@@ -266,12 +202,12 @@ public class MainFileHelper {
             if (dest.exists()) {
                 LOGGER.info("File " + source.getAbsolutePath() + " was successfully copied to " + dest.getAbsolutePath());
             } else {
-                LOGGER.warning("While copying the file "+ source.getAbsolutePath() + " to " + dest.getAbsolutePath()+" an error occurred!");
-                System.out.println("Во время копирования"+ source.getAbsolutePath() + " в " + dest.getAbsolutePath() +"произошла ошибка!");
+                LOGGER.warning("While copying the file " + source.getAbsolutePath() + " to " + dest.getAbsolutePath() + " an error occurred!");
+                System.out.println("Во время копирования " + source.getAbsolutePath() + " в " + dest.getAbsolutePath() + " произошла ошибка!");
             }
         } catch (IOException e) {
-            LOGGER.warning("While copying the file "+ source.getAbsolutePath() + " to " + dest.getAbsolutePath()+" an error occurred! The source file may not be available or it is not possible to write the file to the target folder.");
-            System.out.println("Во время копирования"+ source.getAbsolutePath() + " в " + dest.getAbsolutePath() +"произошла ошибка!\n" +
+            LOGGER.warning("While copying the file " + source.getAbsolutePath() + " to " + dest.getAbsolutePath() + " an error occurred! The source file may not be available or it is not possible to write the file to the target folder.");
+            System.out.println("Во время копирования " + source.getAbsolutePath() + " в " + dest.getAbsolutePath() + " произошла ошибка!\n" +
                     " Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");
         }
     }
@@ -281,7 +217,7 @@ public class MainFileHelper {
         LOGGER.info("Deleting file " + file.getAbsolutePath());
         file.delete();
         if (!file.exists()) {
-            LOGGER.info("File " + file.getAbsolutePath()+" was successfully deleted.");
+            LOGGER.info("File " + file.getAbsolutePath() + " was successfully deleted.");
         } else {
             LOGGER.warning("File " + file.getAbsolutePath() + " was successfully deleted. An error occurred!");
         }
