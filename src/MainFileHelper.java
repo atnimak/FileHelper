@@ -23,7 +23,7 @@ public class MainFileHelper {
     private static boolean running = true;
 
     public static void main(String... args) throws IOException {
-        LOGGER.info("Старт программы. Начинаем диалог с пользователем");
+        LOGGER.info("Start the program. We start a dialogue with the user.");
 
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -127,13 +127,13 @@ public class MainFileHelper {
 
 
         } while (running);
-        LOGGER.info("Завершение работы программы");
+        LOGGER.info("End the program");
 
     }
 
     public static void doOperations() {
-        LOGGER.info("Начато копирование файлов!  MainFileHelper doOperations");
-        System.out.println("Копируем файлы...");
+        LOGGER.info("Started copying files!  MainFileHelper doOperations");
+        System.out.println("Копируем файлы. Осталось скопировать"+filesToCopy.size()+" файлов...");
         for (File oldJpgFile : filesToCopy) {
             StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
             String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
@@ -155,8 +155,8 @@ public class MainFileHelper {
         }
 
         if (del) {
-            LOGGER.info("Начато удаление файлов!");
-            System.out.println("Удаляем файлы...");
+            LOGGER.info("Files deletion started!");
+            System.out.println("Удаляем файлы. Осталось удалить"+filesToDelete.size()+"файлов...");
             for (File file : filesToDelete) {
                 deleteFile(file);
             }
@@ -166,7 +166,7 @@ public class MainFileHelper {
     }
 
     public static void makeFilesToCopy() throws IOException {
-        LOGGER.info("Ищем файлы для копирования! MainFileHelper makeFilesToCopy");
+        LOGGER.info("Looking for files to copy! MainFileHelper makeFilesToCopy");
         System.out.println("Проверяем директорию, ищем файлы для копирования...");
         List<File> files = Arrays.asList(sourceDir.listFiles());
         for (File file : files) {
@@ -190,37 +190,31 @@ public class MainFileHelper {
 
     private static void copyFile(File source, File dest) {
         LOGGER.info("MainFileHelper copyFile");
-        LOGGER.info("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
-        //System.out.println("Копируем " + source.getAbsolutePath() + " в " + dest.getAbsolutePath());
+        LOGGER.info("Сopying " + source.getAbsolutePath() + " to " + dest.getAbsolutePath());
 
         try (FileChannel ic = new FileInputStream(source).getChannel(); FileChannel oc = new FileOutputStream(dest).getChannel()) {
             ic.transferTo(0, ic.size(), oc);
             if (dest.exists()) {
-                //System.out.println("Данные успешно скопированы!");
-                LOGGER.info("Файл " + source.getAbsolutePath() + " в " + dest.getAbsolutePath() +" успешно скопирован!");
+                LOGGER.info("File " + source.getAbsolutePath() + " was successfully copied to " + dest.getAbsolutePath());
             } else {
-                LOGGER.warning("Во время копирования "+ source.getAbsolutePath() + " в " + dest.getAbsolutePath()+" произошла ошибка");
-                //System.out.println("Похоже во время копирования что-то пошло не так.");
+                LOGGER.warning("While copying the file "+ source.getAbsolutePath() + " to " + dest.getAbsolutePath()+" an error occurred!");
+                System.out.println("Во время копирования"+ source.getAbsolutePath() + " в " + dest.getAbsolutePath() +"произошла ошибка!");
             }
         } catch (IOException e) {
-            LOGGER.warning("Во время копирования "+ source.getAbsolutePath() + " в " + dest.getAbsolutePath()+" произошла ошибка. \n " +
-                    "Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");
-            /*System.out.println("Похоже во время копирования что-то пошло не так.\n" +
-                    " Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");*/
+            LOGGER.warning("While copying the file "+ source.getAbsolutePath() + " to " + dest.getAbsolutePath()+" an error occurred! The source file may not be available or it is not possible to write the file to the target folder.");
+            System.out.println("Во время копирования"+ source.getAbsolutePath() + " в " + dest.getAbsolutePath() +"произошла ошибка!\n" +
+                    " Возможно недоступен исходный файл или нет возможности записать файл в целевую папку");
         }
     }
 
     private static void deleteFile(File file) {
         LOGGER.info("MainFileHelper deleteFile");
-        LOGGER.info("Удаляем файл " + file.getAbsolutePath());
-        //System.out.println("Удаляем файл" + file.getAbsolutePath());
+        LOGGER.info("Deleting file " + file.getAbsolutePath());
         file.delete();
         if (!file.exists()) {
-            LOGGER.info("Удален файл " + file.getAbsolutePath());
-            //System.out.println("Удален файл " + file.getAbsolutePath());
+            LOGGER.info("File " + file.getAbsolutePath()+" was successfully deleted.");
         } else {
-            LOGGER.warning("Файл " + file.getAbsolutePath() + " не удален. Что-то пошло не так.");
-            //System.out.println("Файл" + file.getAbsolutePath() + "не удален. Что-то пошло не так.");
+            LOGGER.warning("File " + file.getAbsolutePath() + " was successfully deleted. An error occurred!");
         }
     }
 }
