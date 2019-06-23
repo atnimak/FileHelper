@@ -10,9 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class KeywordsReader {
+    private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
+
     public static String metadataReader(String filename) throws IOException {
+        LOGGER.info("KeywordsReader metadataReader");
         File file = new File(filename);
         String result;
 
@@ -40,11 +44,13 @@ public class KeywordsReader {
     }
 
     public static String checkWindowsKeywords(List<Directory> tagList) {
+        LOGGER.info("KeywordsReader checkWindowsKeywords");
         String result = tagList.get(2).getString(ExifSubIFDDirectory.TAG_WIN_KEYWORDS, "UTF-8");
         return result;
     }
 
     public static String checkIPTCKeywords(List<Directory> tagList) {
+        LOGGER.info("KeywordsReader checkIPTCKeywords");
 
         Collection<Tag> collection = new ArrayList<>();
 

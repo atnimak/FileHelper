@@ -8,36 +8,11 @@ import java.util.logging.Logger;
 
 public class MainFileHelper {
 
-    private static final LogManager logManager = LogManager.getLogManager();
+
     private static final Logger LOGGER = Logger.getLogger(MainFileHelper.class.getName());
 
     static {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd'at'HH.mm.ss");
-        File logDir = new File("Logs");
-        if(!logDir.exists()) logDir.mkdirs();
-        File logFile = new File("Logs/log"+dateFormat.format(new Date())+".txt");
-        Properties properties = new Properties();
-
-        try (FileInputStream fis = new FileInputStream("logger.properties")){
-            properties.load(fis);
-            properties.setProperty("java.util.logging.FileHandler.pattern",logFile.getAbsolutePath());
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
-        }
-
-        try(FileOutputStream fos = new FileOutputStream("logger.properties")){
-            properties.store(fos,null);
-        } catch (FileNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
-        } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Error in loading configuration", e);
-        }
-
-        try {
-            logManager.readConfiguration(new FileInputStream("logger.properties"));
-        } catch (IOException exception) {
-            LOGGER.log(Level.SEVERE, "Error in loading configuration", exception);
-        }
+      LogConfigurator.configureLog();
     }
 
     private static File sourceDir;
@@ -53,7 +28,7 @@ public class MainFileHelper {
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String tmp = "";
-        System.out.println("Привет, это приложение File Helper ver. 0.020 скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+        System.out.println("Привет, это приложение File Helper ver. 0.021 скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
                 "Если в целевых директориях уже есть файлы с именами, совпадающими с копируемыми файлами, эти файлы будут просто перезаписаны.\n" +
                 "Никаких уведомлений в этом случае показано не будет.\n" +
                 "При необходимости исходные файлы могут быть удалены.\n" +
