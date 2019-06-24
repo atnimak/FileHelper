@@ -42,22 +42,28 @@ public class LogConfigurator {
     }
 
     private static void makeDir(File logDir) {
+        logDir.mkdirs();
+        if(!logDir.exists()){
+            try {
+                String path = getProgramPath2();
 
-        try {
-            String path = getProgramPath2();
+                String fileSeparator = System.getProperty("file.separator");
+                String newDir = path + fileSeparator + logDir.getName() + fileSeparator;
 
-            String fileSeparator = System.getProperty("file.separator");
-            String newDir = path + fileSeparator + logDir.getName() + fileSeparator;
-
-            File file = new File(newDir);
-            file.mkdir();
-        } catch (IOException e) {
-            e.printStackTrace();
+                File file = new File(newDir);
+                file.mkdir();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+
+
+
     }
 
     public static String getProgramPath2() throws UnsupportedEncodingException {
-        URL url = TestNewFeatures.class.getProtectionDomain().getCodeSource().getLocation();
+        URL url = MainFileHelper.class.getProtectionDomain().getCodeSource().getLocation();
         String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
         String parentPath = new File(jarPath).getParentFile().getPath();
         return parentPath;
