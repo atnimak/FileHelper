@@ -27,7 +27,7 @@ public class MainFileHelper {
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String tmp = "";
-        System.out.println("Привет, это приложение File Helper ver. 0.021 скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+        System.out.println("Привет, это приложение File Helper ver. 0.022 скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
                 "Если в целевых директориях уже есть файлы с именами, совпадающими с копируемыми файлами, эти файлы будут просто перезаписаны.\n" +
                 "Никаких уведомлений в этом случае показано не будет.\n" +
                 "При необходимости исходные файлы могут быть удалены.\n" +
