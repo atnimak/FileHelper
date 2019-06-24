@@ -24,7 +24,7 @@ public class MainFileHelper {
     public static void main(String... args) throws IOException {
         LOGGER.info("Start the program. Check the arguments.");
         if(args.length>0){
-            ArgumentStarter.getArguments();
+            ArgumentStarter.setArguments(args);
         }
         LOGGER.info("Start the program. Begin a dialog with the user.");
 
