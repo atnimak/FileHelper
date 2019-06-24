@@ -22,7 +22,7 @@ public class MainFileHelper {
     private static boolean running = true;
 
     public static void main(String... args) throws IOException {
-        LOGGER.info("Start the program. We start a dialogue with the user.");
+        LOGGER.info("Start the program. Begin a dialog with the user.");
 
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -150,7 +150,7 @@ public class MainFileHelper {
 
                 copyFile(oldJpgFile, newJpgFile);
                 copyFile(oldEpsFile, newEpsFile);
-                ProgressChecker.checkProgress(oldJpgFile,filesToCopy);
+                ProgressChecker.checkProgress(oldJpgFile, filesToCopy);
 
             }
             if (del) {
@@ -162,9 +162,9 @@ public class MainFileHelper {
 
         if (del) {
             LOGGER.info("Files deletion started!");
-            System.out.println("\n Удаляем файлы. Осталось удалить " + filesToDelete.size() * 2 + " файлов...");
+            System.out.println("Удаляем файлы. Осталось удалить " + filesToDelete.size() + " файлов...");
             for (File file : filesToDelete) {
-                ProgressChecker.checkProgress(file,filesToDelete);
+                ProgressChecker.checkProgress(file, filesToDelete);
                 deleteFile(file);
             }
         }
