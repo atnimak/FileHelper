@@ -22,6 +22,10 @@ public class MainFileHelper {
     private static boolean running = true;
 
     public static void main(String... args) throws IOException {
+        LOGGER.info("Start the program. Check the arguments.");
+        if(args.length>0){
+            ArgumentStarter.getArguments();
+        }
         LOGGER.info("Start the program. Begin a dialog with the user.");
 
         boolean check = true;
