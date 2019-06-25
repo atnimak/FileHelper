@@ -1,0 +1,8 @@
+C:\Users\Maxim\JavaProjects\TestArchifacts\FileHelper\FilesForTest\sourse
+C:\Users\Maxim\JavaProjects\TestArchifacts\FileHelper\FilesForTest\target1
+C:\Users\Maxim\JavaProjects\TestArchifacts\FileHelper\FilesForTest\target2
+C:\Users\Maxim\JavaProjects\TestArchifacts\FileHelper\FilesForTest\target3
+C:\Users\Maxim\JavaProjects\TestArchifacts\FileHelper\FilesForTest\target4
+n
+y
+n

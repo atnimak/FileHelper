@@ -20,9 +20,12 @@ public class MainFileHelper {
 
     public static void main(String... args) {
         LOGGER.info("Start the program. Check the arguments.");
-        if (args.length > 0) {
+        if (args.length > 0 && args[0].equals("-c")) {
+            ConfigurationFileStarter.setArguments(new File("configurationFile.txt"));
+        } else if (args.length > 0) {
             ArgumentStarter.setArguments(args);
         }
+
         LOGGER.info("Start the program. Begin a dialog with the user.");
 
         boolean check = true;
