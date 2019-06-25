@@ -1,28 +1,21 @@
-import org.junit.Before;
-
-import static org.junit.Assert.assertEquals;
-
 public class smallMainFileHelperTest extends MainFileHelperTest {
-    static int sourceDirLengthBefore = 32;
-    static int sourceDirLengthAfter = 4;
-    static int targetDirLengthAfter = 28;
+    /**
+     * Создаем переменные с количеством файлов в тестовых папках. До и после работы программы
+     */
+    private static int sourceDirLengthBefore = 32;
+    private static int sourceDirLengthAfter = 4;
+    private static int targetDirLengthAfter = 28;
 
-    //Создаем переменные с тестовыми папками
-    static String sourceDir = "C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\sourse";
-    static String[] targetDirs = {"C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\target1",
+    /**
+     * Создаем переменные с тестовыми папками
+     */
+    private static String sourceDir1 = "C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\sourse";
+    private static String[] targetDirs = {"C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\target1",
             "C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\target2",
             "C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\target3",
             "C:\\Users\\Maxim\\JavaProjects\\TestArchifacts\\FileHelper\\FilesForTest\\target4"};
 
-    @Before
-    public void makeReady(){
-        makeDirectoriesReady(sourceDirLengthBefore, sourceDir, targetDirs);
+    public smallMainFileHelperTest() {
+        super(sourceDir1, targetDirs, sourceDirLengthBefore, sourceDirLengthAfter, targetDirLengthAfter);
     }
-
-    @org.junit.Test
-    public void smallTest() {
-        main(sourceDir,targetDirs,sourceDirLengthAfter,targetDirLengthAfter);
-
-    }
-
 }
