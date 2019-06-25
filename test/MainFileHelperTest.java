@@ -7,10 +7,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFileHelperTest {
+import static org.junit.Assert.assertEquals;
 
-    static int sourceDirLengthAfter;
-    static int targetDirLengthAfter;
+public class MainFileHelperTest {
 
     public static void makeDirectoriesReady(int sourceDirLengthBefore, String sourceDir, String... targetDirs){
         //Создаем объекты File на основе строк с адресами тестовых папок
@@ -46,12 +45,25 @@ public class MainFileHelperTest {
         return directory.listFiles().length;
     }
 
-    public void main(String... args) {
+    protected void main(String sourceDir, String[] targetDirs, int sourceDirLengthAfter, int targetDirLengthAfter) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(sourceDir).append('\n');
+        for (int i = 0; i < targetDirs.length; i++) {
+            sb.append(targetDirs[i]).append('\n');
+        }
+        sb.append("n").append('\n');
+        sb.append("y").append('\n');
+        sb.append("n").append('\n');
+        String data = sb.toString();
         try {
-            MainFileHelper.main(args);
+            MainFileHelper.main(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        assertEquals(checkSizeOfDirectory(sourceDir), sourceDirLengthAfter);
+        for (int i=0;i<targetDirs.length;i++){
+            assertEquals(checkSizeOfDirectory(targetDirs[i]),targetDirLengthAfter);
+        }
     }
 }
