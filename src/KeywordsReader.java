@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class KeywordsReader {
     private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
 
-    public static String metadataReader(String filename) throws IOException {
+    public static String metadataReader(String filename) {
         LOGGER.info("KeywordsReader metadataReader");
         File file = new File(filename);
         String result;
@@ -24,7 +24,11 @@ public class KeywordsReader {
         try {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException e) {
-            e.printStackTrace();
+            System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
+            LOGGER.warning("While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
+        } catch (IOException e) {
+            System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
+            LOGGER.warning("While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
         }
         List<Directory> tagList = (List<Directory>) metadata.getDirectories();
         String windowsKeywords = checkWindowsKeywords(tagList);
@@ -56,12 +60,14 @@ public class KeywordsReader {
 
         try {
             collection = tagList.get(7).getTags();
-        } catch (IndexOutOfBoundsException ioobe) {}
+        } catch (IndexOutOfBoundsException ioobe) {
+        }
         List<Tag> listOfTag = new ArrayList<>(collection);
         String result = null;
         try {
             result = listOfTag.get(6).getDescription();
-        } catch (IndexOutOfBoundsException ioobe) {}
+        } catch (IndexOutOfBoundsException ioobe) {
+        }
         return result;
     }
 }

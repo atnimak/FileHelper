@@ -14,16 +14,13 @@ public class MainFileHelper {
         LogConfigurator.configureLog();
     }
 
-    private static File sourceDir;
-    private static List<File> targetDirList;
-    private static List<File> filesToCopy;
-    private static List<File> filesToDelete;
+
     private static boolean del = false;
     private static boolean running = true;
 
-    public static void main(String... args) throws IOException {
+    public static void main(String... args) {
         LOGGER.info("Start the program. Check the arguments.");
-        if(args.length>0){
+        if (args.length > 0) {
             ArgumentStarter.setArguments(args);
         }
         LOGGER.info("Start the program. Begin a dialog with the user.");
@@ -40,14 +37,15 @@ public class MainFileHelper {
                 "Отвечать на вопросы программы можно используя клвиши Y в значении ДА и N в значении НЕТ,\n" +
                 "также допустимо использование строчных символов y и n.\n");
         do {
-            targetDirList = new ArrayList<>();
-            filesToCopy = new ArrayList<>();
-            filesToDelete = new ArrayList<>();
+            File sourceDir;
+            List<File> targetDirList = new ArrayList<>();
+
+
             check = true;
 
             do {
                 System.out.println("Введите директорию, файлы из которой необходимо обработать");
-                tmp = reader.readLine();
+                tmp = readLine(reader);
                 sourceDir = new File(tmp);
                 if (!sourceDir.isDirectory() && !sourceDir.exists()) {
                     System.out.println("Этот адрес не существует или это не директория!");
@@ -65,7 +63,7 @@ public class MainFileHelper {
             do {
                 tmp = "";
                 System.out.println("Введите директорию, в которую необходимо скопировать файлы или N");
-                tmp = reader.readLine();
+                tmp = readLine(reader);
                 File targetDir = new File(tmp);
                 if ((!tmp.isEmpty()) && (!(tmp.equals("N") || tmp.equals("n"))) && targetDir.isDirectory()) {
                     targetDirList.add(targetDir);
@@ -92,7 +90,7 @@ public class MainFileHelper {
             do {
                 tmp = "";
                 System.out.println("Удалить файлы из исходной аудитории после копирования? Y/N");
-                tmp = reader.readLine();
+                tmp = readLine(reader);
                 if (tmp.equals("Y") || tmp.equals("y")) {
                     del = true;
                     System.out.println("Файлы из исходной директории будут удалены!");
@@ -107,15 +105,15 @@ public class MainFileHelper {
             } while (check);
             System.out.println("Проводятся запрошенные операции...");
 
-            makeFilesToCopy();
-            doOperations();
+            List<File> filesToCopy = makeFilesToCopy(sourceDir);
+            doOperations(filesToCopy, targetDirList);
 
             check = true;
             do {
                 tmp = "";
                 LOGGER.info("Asking about new tasks");
                 System.out.println("Хотите еще что-нибудь сделать? Y/N");
-                tmp = reader.readLine();
+                tmp = readLine(reader);
                 if (tmp.equals("Y") || tmp.equals("y")) {
                     LOGGER.info("Got positive answer");
                     running = true;
@@ -138,9 +136,20 @@ public class MainFileHelper {
 
     }
 
-    public static void doOperations() {
+    private static String readLine(BufferedReader reader) {
+        try {
+            return reader.readLine();
+        } catch (IOException e) {
+            System.out.println("Во время чтения команды произошла ошибка. Если ошибка повтооряется перезапустите программу!");
+            LOGGER.warning("While reading command from command line\n" + e.getStackTrace());
+        }
+        return new String("");
+    }
+
+    private static void doOperations(List<File> filesToCopy, List<File> targetDirList) {
         LOGGER.info("Started copying files!  MainFileHelper doOperations");
         System.out.println("Копируем файлы. Осталось скопировать " + filesToCopy.size() * 2 + " файлов...");
+        List<File> filesToDelete = new ArrayList<>();
         for (File oldJpgFile : filesToCopy) {
             StringBuilder oldEpsSB = new StringBuilder(oldJpgFile.getAbsolutePath());
             String oldEps = oldEpsSB.replace(oldEpsSB.length() - 3, oldEpsSB.length(), "eps").toString();
@@ -178,7 +187,9 @@ public class MainFileHelper {
 
     }
 
-    public static void makeFilesToCopy() throws IOException {
+    private static List<File> makeFilesToCopy(File sourceDir) {
+        List<File> filesToCopy = new ArrayList<>();
+
         LOGGER.info("Looking for files to copy! MainFileHelper makeFilesToCopy");
         System.out.println("Проверяем директорию, ищем файлы для копирования...");
         List<File> files = Arrays.asList(sourceDir.listFiles());
@@ -192,10 +203,11 @@ public class MainFileHelper {
             }
 
         }
+        return filesToCopy;
 
     }
 
-    public static String exifReader(String fileName) throws IOException {
+    public static String exifReader(String fileName) {
         LOGGER.info("MainFileHelper exifReader");
         return KeywordsReader.metadataReader(fileName);
     }

@@ -97,11 +97,7 @@ public abstract class MainFileHelperTest {
         String data = sb.toString();
 
         /**Вызываем метод main*/
-        try {
-            MainFileHelper.main(data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MainFileHelper.main(data);
 
         /**Проверяем результат работы программы. Сначала сравниваем количество файлов
          в исходной папке после работы программы с ожидаемым значением. Затем в цикле сравниваем количество файлов в
