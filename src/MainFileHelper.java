@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MainFileHelper {
@@ -19,7 +20,7 @@ public class MainFileHelper {
     }
 
     public static void main(String... args) {
-        LOGGER.info("Start the program. Check the arguments.");
+        LOGGER.log(Level.INFO, "Start the program. Check the arguments.");
         if (args.length > 0 && args[0].equals("-c")) {
             askQuestions = false;
             ConfigurationFileStarter.setArguments(new File("configurationFile.txt"));
@@ -28,7 +29,7 @@ public class MainFileHelper {
             ArgumentStarter.setArguments(args);
         }
 
-        LOGGER.info("Start the program. Begin a dialog with the user.");
+        LOGGER.log(Level.INFO, "Start the program. Begin a dialog with the user.");
 
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -128,25 +129,25 @@ public class MainFileHelper {
             check = true;
             do {
                 tmp = "";
-                LOGGER.info("Asking about new tasks");
+                LOGGER.log(Level.INFO, "Asking about new tasks");
                 System.out.println("Запрашиваются дополнительные задачи...");
                 if (askQuestions) {
                     System.out.println("Хотите еще что-нибудь сделать? Y/N");
                 }
                 tmp = readLine(reader);
                 if (tmp.equals("Y") || tmp.equals("y")) {
-                    LOGGER.info("Got positive answer");
+                    LOGGER.log(Level.INFO, "Got positive answer");
                     System.out.println("Формируем дополнительные задачи...");
                     running = true;
                     check = false;
                 } else if (tmp.equals("N") || tmp.equals("n")) {
-                    LOGGER.info("Got negative answer");
+                    LOGGER.log(Level.INFO, "Got negative answer");
                     System.out.println("Дополнительных задач нет");
                     System.out.println("Начинаем выполнение запланированных задач!");
                     running = false;
                     check = false;
                 } else {
-                    LOGGER.info("Got wrong answer");
+                    LOGGER.log(Level.INFO, "Got wrong answer");
                     System.out.println("Ответ не принят. Просто введите один из вариантов Y/N");
                 }
 
@@ -154,14 +155,14 @@ public class MainFileHelper {
 
         } while (running);
 
-        LOGGER.info("Start copying files");
+        LOGGER.log(Level.INFO, "Start copying files");
         System.out.println("Проводятся запрошенные операции...");
         for (Task task : tasks) {
             System.out.println();
             task.copyFiles();
         }
         System.out.println("Все задачи выполнены. Завершение работы программы");
-        LOGGER.info("End the program");
+        LOGGER.log(Level.INFO, "End the program");
     }
 
     private static String readLine(BufferedReader reader) {
@@ -169,7 +170,7 @@ public class MainFileHelper {
             return reader.readLine();
         } catch (IOException e) {
             System.out.println("Во время чтения команды произошла ошибка. Если ошибка повтооряется перезапустите программу!");
-            LOGGER.warning("While reading command from command line\n" + e.getStackTrace());
+            LOGGER.log(Level.WARNING, "While reading command from command line\n" + e.getStackTrace());
         }
         return new String("");
     }
