@@ -6,6 +6,7 @@ public class ProgressChecker {
     static int progress = 0;
 
     public static void resetProgress() {
+        finishCheck = true;
         progress = 0;
     }
 
