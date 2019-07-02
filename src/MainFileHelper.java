@@ -12,6 +12,7 @@ public class MainFileHelper {
     private static boolean del = false;
     private static boolean running = true;
     private static boolean askQuestions = true;
+    private static String ver = "0.022";
 
     static {
         LogConfigurator.configureLog();
@@ -33,7 +34,7 @@ public class MainFileHelper {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String tmp = "";
         if (askQuestions) {
-            System.out.println("Привет, это приложение File Helper ver. 0.022 скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+            System.out.println("Привет, это приложение File Helper ver. "+ver+" скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
                     "Если в целевых директориях уже есть файлы с именами, совпадающими с копируемыми файлами, эти файлы будут просто перезаписаны.\n" +
                     "Никаких уведомлений в этом случае показано не будет.\n" +
                     "При необходимости исходные файлы могут быть удалены.\n" +
