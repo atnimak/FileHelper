@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Класс считывает ключевые слова из EXIF, jpg-файлов изображений.
+ */
 public class KeywordsReader {
     private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
 

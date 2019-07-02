@@ -1,6 +1,10 @@
 import java.io.File;
 import java.util.List;
 
+/**
+ * Класс проверяет и выводит на консоль прогресс копирования и удаления файлов.
+ */
+
 public class ProgressChecker {
     static boolean finishCheck = true;
     static int progress = 0;
@@ -10,6 +14,10 @@ public class ProgressChecker {
         progress = 0;
     }
 
+    /**
+     * Метод сначала проверяет какой сколько файлов скопировано\удалено, а сколько осталось. Вычисляет процент выполненного.
+     * Затем округляет процент до десятков и выводит на консоль.
+     */
     public static void checkProgress(File file, List<File> files) {
         int index = Math.round(((float) files.indexOf(file) / (float) files.size()) * (float) 100);
         index = (int) (Math.rint((double) index / 10) * 10);

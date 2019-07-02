@@ -121,6 +121,7 @@ public class MainFileHelper {
             } while (check);
 
             tasks.add(new Task(sourceDir,targetDirList,del));
+            LOGGER.log(Level.INFO,"Task was added to task list");
 
             check = true;
             do {

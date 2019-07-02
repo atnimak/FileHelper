@@ -40,15 +40,18 @@ public abstract class MainFileHelperTest {
      */
     @Before
     public void makeDirectoriesReady() {
-        //Создаем объекты File на основе строк с адресами тестовых папок
+        /**
+         * Создаем объекты File на основе строк с адресами тестовых папок
+         */
         File sourceFileDir = new File(sourceDir);
         List<File> targetFileDirs = new ArrayList<>();
         for (int i = 0; i < targetDirs.length; i++) {
             targetFileDirs.add(new File(targetDirs[i]));
         }
 
-        //Проверяем достаточно ли файлов в исходной директории. Если файлов недостаточно,
-        // Перемещаем все файлы из целевых директорий в исходную директорию.
+        /**Проверяем достаточно ли файлов в исходной директории. Если файлов недостаточно,
+         * перемещаем все файлы из целевых директорий в исходную директорию.
+         */
         if (sourceFileDir.listFiles().length < sourceDirLengthBefore) {
 
             for (File targetDir : targetFileDirs) {

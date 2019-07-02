@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Если программа запущена с аргументом -с. Класс MainFileHelper передаст управление в этот класс. Этот класс, вместо того, чтобы спрашивать
+ * пользователя о директориях и других настройках возьмет все данные из файла, который передан в метод serArguments(); Затем класс соберет
+ * настройки в массив и передаст их методу ArgumentStarter.setArguments(), для дальнейшей работы.
+ */
 public class ConfigurationFileStarter {
     private static final Logger LOGGER = Logger.getLogger(ConfigurationFileStarter.class.getName());
 

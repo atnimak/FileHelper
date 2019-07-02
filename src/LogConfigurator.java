@@ -8,6 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+
+/**
+ * Класс настраивает Logger и LogManager. Формирует формат логов и место хранения. Все настройки хранит в файле logger.properties
+ */
 public class LogConfigurator {
     private static final LogManager logManager = LogManager.getLogManager();
     private static final Logger LOGGER = Logger.getLogger(LogConfigurator.class.getName());
@@ -40,29 +44,25 @@ public class LogConfigurator {
             LOGGER.log(Level.SEVERE, "Error in loading configuration", exception);
         }
     }
-
+    /**
+     * Метод проверяет есть ли в директории с исполняемым файлов каталог Logs для хранения логов. Если нет - создает каталог.
+     */
     private static void makeDir(File logDir) {
         logDir.mkdirs();
         if(!logDir.exists()){
             try {
-                String path = getProgramPath2();
-
+                String path = getProgramPath();
                 String fileSeparator = System.getProperty("file.separator");
                 String newDir = path + fileSeparator + logDir.getName() + fileSeparator;
-
                 File file = new File(newDir);
                 file.mkdir();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
-
-
     }
 
-    public static String getProgramPath2() throws UnsupportedEncodingException {
+    public static String getProgramPath() throws UnsupportedEncodingException {
         URL url = MainFileHelper.class.getProtectionDomain().getCodeSource().getLocation();
         String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
         String parentPath = new File(jarPath).getParentFile().getPath();

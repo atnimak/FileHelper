@@ -1,6 +1,11 @@
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+
+/**
+ * Класс собирает полученные аргументы в строку и подменяет System.in, чтобы метод main()  в классе MainFileHelper считывая строки
+ * из System.in получил нужные адреса папок и настройки в нужный момент.
+ */
 public class ArgumentStarter {
     public static void setArguments(String... args) {
         /**
