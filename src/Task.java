@@ -83,8 +83,8 @@ public class Task {
             }
         }
         ProgressChecker.resetProgress();
-        System.out.println("Похоже все операции проведены!");
-        LOGGER.info("Task: All operations are done");
+        System.out.println("Задача выполнена!");
+        LOGGER.info("Task.class: All operations in this task are done");
 
     }
 
