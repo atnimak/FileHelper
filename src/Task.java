@@ -30,12 +30,12 @@ public class Task {
     private List<File> makeFilesToCopy(File sourceDir) {
         List<File> filesToCopy = new ArrayList<>();
 
-        LOGGER.info("Task.class: Looking for files to copy! MainFileHelper makeFilesToCopy");
+        LOGGER.info("Task.class: makeFilesToCopy Looking for files to copy!");
         System.out.println("Проверяем директорию, ищем файлы для копирования...");
         List<File> files = Arrays.asList(sourceDir.listFiles());
         for (File file : files) {
             if (!file.isDirectory() && file.getName().toLowerCase().endsWith(".jpg")) {
-                String s = exifReader(file.getAbsolutePath());
+                String s = KeywordsReader.metadataReader(file.getAbsolutePath());
                 s = s.replaceAll("XP Keywords \\s+ : ", "").trim();
                 if (!s.isEmpty()) {
                     filesToCopy.add(file);
@@ -45,11 +45,6 @@ public class Task {
         }
         return filesToCopy;
 
-    }
-
-    public String exifReader(String fileName) {
-        LOGGER.info("Task.class: exifReader");
-        return KeywordsReader.metadataReader(fileName);
     }
 
     private void doOperations(List<File> filesToCopy, List<File> targetDirList) {
