@@ -13,19 +13,13 @@ public class Task {
     private static final Logger LOGGER = Logger.getLogger(Task.class.getName());
 
     File sourceDir;
-    List<File> targetDirList = new ArrayList<>();
+    List<File> targetDirList;
     boolean del;
 
-    public void setDeleteFileAccept(boolean del) {
-        this.del = del;
-    }
-
-    public void setTargetDirList(List<File> targetDirList) {
-        this.targetDirList = targetDirList;
-    }
-
-    public void setSourceDir(File sourceDir) {
+    public Task(File sourceDir, List<File> targetDirList, boolean del) {
         this.sourceDir = sourceDir;
+        this.targetDirList = targetDirList;
+        this.del = del;
     }
 
     private List<File> makeFilesToCopy(File sourceDir) {
@@ -120,7 +114,7 @@ public class Task {
         }
     }
 
-    public void copyFiles (){
+    public void copyFiles() {
         List<File> filesToCopy = makeFilesToCopy(sourceDir);
         doOperations(filesToCopy, targetDirList);
     }

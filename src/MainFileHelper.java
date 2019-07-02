@@ -120,11 +120,7 @@ public class MainFileHelper {
                 }
             } while (check);
 
-            Task task = new Task();
-            task.setSourceDir(sourceDir);
-            task.setTargetDirList(targetDirList);
-            task.setDeleteFileAccept(del);
-            tasks.add(task);
+            tasks.add(new Task(sourceDir,targetDirList,del));
 
             check = true;
             do {
