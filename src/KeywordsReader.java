@@ -10,13 +10,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class KeywordsReader {
     private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
 
     public static String metadataReader(String filename) {
-        LOGGER.info("KeywordsReader metadataReader");
+        LOGGER.log(Level.INFO,"KeywordsReader metadataReader");
         File file = new File(filename);
         String result;
 
@@ -25,10 +26,10 @@ public class KeywordsReader {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException e) {
             System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
-            LOGGER.warning("While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
+            LOGGER.log(Level.WARNING,"While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
         } catch (IOException e) {
             System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
-            LOGGER.warning("While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
+            LOGGER.log(Level.WARNING,"While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
         }
         List<Directory> tagList = (List<Directory>) metadata.getDirectories();
         String windowsKeywords = checkWindowsKeywords(tagList);
@@ -48,13 +49,13 @@ public class KeywordsReader {
     }
 
     public static String checkWindowsKeywords(List<Directory> tagList) {
-        LOGGER.info("KeywordsReader checkWindowsKeywords");
+        LOGGER.log(Level.INFO,"KeywordsReader checkWindowsKeywords");
         String result = tagList.get(2).getString(ExifSubIFDDirectory.TAG_WIN_KEYWORDS, "UTF-8");
         return result;
     }
 
     public static String checkIPTCKeywords(List<Directory> tagList) {
-        LOGGER.info("KeywordsReader checkIPTCKeywords");
+        LOGGER.log(Level.INFO,"KeywordsReader checkIPTCKeywords");
 
         Collection<Tag> collection = new ArrayList<>();
 
