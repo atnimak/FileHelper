@@ -17,7 +17,7 @@ public class KeywordsReader {
     private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
 
     public static String metadataReader(String filename) {
-        LOGGER.log(Level.INFO,"KeywordsReader metadataReader");
+        LOGGER.log(Level.CONFIG,"KeywordsReader metadataReader");
         File file = new File(filename);
         String result;
 
@@ -49,13 +49,13 @@ public class KeywordsReader {
     }
 
     public static String checkWindowsKeywords(List<Directory> tagList) {
-        LOGGER.log(Level.INFO,"KeywordsReader checkWindowsKeywords");
+        LOGGER.log(Level.CONFIG,"KeywordsReader checkWindowsKeywords");
         String result = tagList.get(2).getString(ExifSubIFDDirectory.TAG_WIN_KEYWORDS, "UTF-8");
         return result;
     }
 
     public static String checkIPTCKeywords(List<Directory> tagList) {
-        LOGGER.log(Level.INFO,"KeywordsReader checkIPTCKeywords");
+        LOGGER.log(Level.CONFIG,"KeywordsReader checkIPTCKeywords");
 
         Collection<Tag> collection = new ArrayList<>();
 
