@@ -209,8 +209,10 @@ public class MainFileHelper {
          */
         LOGGER.log(Level.INFO, "Start copying files");
         System.out.println("Проводятся запрошенные операции...");
-        for (Task task : tasks) {
+        for(int i=0;i<tasks.size();i++){
+            Task task = tasks.get(i);
             System.out.print(System.lineSeparator());
+            System.out.println("Выполняется задача "+(i+1)+" из "+tasks.size());
             task.copyFiles();
         }
         System.out.println("Все задачи выполнены. Завершение работы программы");
