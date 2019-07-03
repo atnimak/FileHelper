@@ -65,6 +65,7 @@ public class MainFileHelper {
                     "обратите внимание, чтобы все символы в имени файла и адресе были цифрами или символами латинского алфавита.\n" +
                     "Отвечать на вопросы программы можно используя клвиши Y в значении ДА и N в значении НЕТ,\n" +
                     "также допустимо использование строчных символов y и n.\n");
+            System.out.print(System.lineSeparator());
         }
 
         /**
@@ -96,6 +97,7 @@ public class MainFileHelper {
                             "существует ли директория и есть ли к ней доступ");
                 }
             } while (check);
+            System.out.print(System.lineSeparator());
 
             /**
              * Блок ниже запрашивает и проверяет на доступность директории в которые необходимо скорпировать файлы.
@@ -119,6 +121,7 @@ public class MainFileHelper {
                 } else if ((tmp.equals("N") || tmp.equals("n")) && targetDirList.size() < 1) {
                     System.out.println("Должна быть хотя бы одна целевая директория");
                 } else if ((tmp.equals("N") || tmp.equals("n")) && targetDirList.size() > 0) {
+                    System.out.println("Добавление целевых директорий окончено."+System.lineSeparator());
                     System.out.println("Файлы из директории " + sourceDir.getAbsolutePath() + " будут скопированы в директории: ");
                     for (File s : targetDirList) {
                         System.out.println(s.getAbsolutePath());
@@ -131,6 +134,7 @@ public class MainFileHelper {
                             " и есть ли к ней доступ");
                 }
             } while (check);
+            System.out.print(System.lineSeparator());
 
             /**
              * Блок ниже запрашивает необходимость удаления файлов. Ожидается, что ответ будет Y/y в случае, если файлы нужно удалить
@@ -156,6 +160,7 @@ public class MainFileHelper {
                     System.out.println("Ответ не принят. Просто введите один из вариантов Y или N");
                 }
             } while (check);
+            System.out.print(System.lineSeparator());
 
             /**
              * В блоке ниже создается новая задача в конструктор которй передается целевая директория, список целевых директорий и переменая
@@ -194,6 +199,7 @@ public class MainFileHelper {
                 }
 
             } while (check);
+            System.out.print(System.lineSeparator());
 
         } while (running);
 
@@ -204,7 +210,7 @@ public class MainFileHelper {
         LOGGER.log(Level.INFO, "Start copying files");
         System.out.println("Проводятся запрошенные операции...");
         for (Task task : tasks) {
-            System.out.println();
+            System.out.print(System.lineSeparator());
             task.copyFiles();
         }
         System.out.println("Все задачи выполнены. Завершение работы программы");
