@@ -19,8 +19,11 @@ import java.util.logging.Logger;
 public class KeywordsReader {
     private static final Logger LOGGER = Logger.getLogger(KeywordsReader.class.getName());
 
+    /**
+     * Метод считывает ключевые слова из EXIF, jpg-файлов изображений.
+     */
     public static String metadataReader(String filename) {
-        LOGGER.log(Level.CONFIG,"KeywordsReader metadataReader");
+        LOGGER.log(Level.CONFIG, "KeywordsReader metadataReader");
         File file = new File(filename);
         String result;
 
@@ -29,10 +32,10 @@ public class KeywordsReader {
             metadata = ImageMetadataReader.readMetadata(file);
         } catch (ImageProcessingException e) {
             System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
-            LOGGER.log(Level.WARNING,"While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
+            LOGGER.log(Level.WARNING, "While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
         } catch (IOException e) {
             System.out.println("Во время чтения метаданных файла " + file.getAbsolutePath() + " произошла ошибка. Возможно файл недоступен!");
-            LOGGER.log(Level.WARNING,"While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
+            LOGGER.log(Level.WARNING, "While reading methadata from file" + file.getAbsolutePath() + "an error occurred!\n" + e.getStackTrace());
         }
         List<Directory> tagList = (List<Directory>) metadata.getDirectories();
         String windowsKeywords = checkWindowsKeywords(tagList);
@@ -51,14 +54,20 @@ public class KeywordsReader {
 
     }
 
+    /**
+     * Метод проверяет EXIF tag Windows keywords
+     */
     public static String checkWindowsKeywords(List<Directory> tagList) {
-        LOGGER.log(Level.CONFIG,"KeywordsReader checkWindowsKeywords");
+        LOGGER.log(Level.CONFIG, "KeywordsReader checkWindowsKeywords");
         String result = tagList.get(2).getString(ExifSubIFDDirectory.TAG_WIN_KEYWORDS, "UTF-8");
         return result;
     }
 
+    /**
+     * Метод проверяет EXIF tag IPTC keywords
+     */
     public static String checkIPTCKeywords(List<Directory> tagList) {
-        LOGGER.log(Level.CONFIG,"KeywordsReader checkIPTCKeywords");
+        LOGGER.log(Level.CONFIG, "KeywordsReader checkIPTCKeywords");
 
         Collection<Tag> collection = new ArrayList<>();
 

@@ -44,12 +44,13 @@ public class LogConfigurator {
             LOGGER.log(Level.SEVERE, "Error in loading configuration", exception);
         }
     }
+
     /**
      * Метод проверяет есть ли в директории с исполняемым файлов каталог Logs для хранения логов. Если нет - создает каталог.
      */
     private static void makeDir(File logDir) {
         logDir.mkdirs();
-        if(!logDir.exists()){
+        if (!logDir.exists()) {
             try {
                 String path = getProgramPath();
                 String fileSeparator = System.getProperty("file.separator");
@@ -62,7 +63,10 @@ public class LogConfigurator {
         }
     }
 
-    public static String getProgramPath() throws UnsupportedEncodingException {
+    /**
+     * Метод возвращает путь к jar-файлу
+     */
+    private static String getProgramPath() throws UnsupportedEncodingException {
         URL url = MainFileHelper.class.getProtectionDomain().getCodeSource().getLocation();
         String jarPath = URLDecoder.decode(url.getFile(), "UTF-8");
         String parentPath = new File(jarPath).getParentFile().getPath();

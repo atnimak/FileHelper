@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 public class ConfigurationFileStarter {
     private static final Logger LOGGER = Logger.getLogger(ConfigurationFileStarter.class.getName());
 
+    /**
+     * Метод собирает из переданного в него файла строки и формирует из них массив строк. Затем передает его в ArgumentStarter.setArguments().
+     */
     public static void setArguments(File configurationFile) {
         List<String> args = new ArrayList<String>();
         try {

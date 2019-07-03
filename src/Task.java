@@ -9,6 +9,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Класс представляет собой "задачу", в конструктор которй передаются:
+ * - исходная папка
+ * - лист целевых папок
+ * - boolean, который указывает на необходимость удаления файлов из исходной папки после перемещения. true - удалять, false - не удалять
+ * <p>
+ * При вызове метода copyFiles() "задача" начинает выполнять сама себя: проверяет исходную директорию на наличие jpg-файлов с ключевыми словами,
+ * создает список этих файлов и их пар (eps-файлов с идентичными названиями), и копирует их в каждую папку из списка targetDirList - списка целевых папок,
+ * затем, если третий параметр конструктора del равен true - удаляет все, скопированные файлы из исходной директории.
+ */
 public class Task {
     private static final Logger LOGGER = Logger.getLogger(Task.class.getName());
 
@@ -16,12 +26,19 @@ public class Task {
     List<File> targetDirList;
     boolean del;
 
+    /**
+     * Заготовка для комментария
+     */
     public Task(File sourceDir, List<File> targetDirList, boolean del) {
         this.sourceDir = sourceDir;
         this.targetDirList = targetDirList;
         this.del = del;
     }
 
+    /**
+     * Метод получает исходную директорию в качестве аргумента, проверяет ее содержимое на наличие jpg-файлов с ключевыми словами,
+     * создает список из этих файлов и их пар (eps-файлов с идентичными названиями), и возвращает список файлов для копирования (jpg-файлов и их eps-пар).
+     */
     private List<File> makeFilesToCopy(File sourceDir) {
         List<File> filesToCopy = new ArrayList<>();
 
@@ -42,6 +59,12 @@ public class Task {
 
     }
 
+    /**
+     * Метод получает в качестве аргументов список файлов для копирования и список целевых директорий. Для каждого файла из списка
+     * для копирования, с помощью адреса целевых директорий, метод формирует целевой адрес и вызывает метод copyFile(), чтобы
+     * скопировать файл в целевую директорию. В поцессе копирования метод формирует список файлов для удаления. И если переменная
+     * del равна truе, вызывает метод deleteFile(), для каждого файла из списка filesToDelete
+     */
     private void doOperations(List<File> filesToCopy, List<File> targetDirList) {
         LOGGER.log(Level.INFO, "Task.class: doOperations Started copying files! ");
         System.out.println("Копируем файлы. Осталось скопировать " + filesToCopy.size() * 2 + " файлов...");
@@ -84,6 +107,9 @@ public class Task {
     }
 
 
+    /**
+     * Метод получает в качестве аргументов адрес исходного файла и адрес конечного файла и копирует файл из исходного месторасположения в конечное.
+     */
     private void copyFile(File source, File dest) {
         LOGGER.log(Level.CONFIG, "Task.class: copyFile");
         LOGGER.log(Level.CONFIG, "Task.class: Сopying " + source.getAbsolutePath() + " to " + dest.getAbsolutePath());
@@ -103,6 +129,9 @@ public class Task {
         }
     }
 
+    /**
+     * Метод получает в качестве аргумента адрес файла из списка filesToDelete, поэтому метод просто удаляет это файл.
+     */
     private void deleteFile(File file) {
         LOGGER.log(Level.CONFIG, "Task.class: deleteFile");
         LOGGER.log(Level.CONFIG, "Task.class: Deleting file " + file.getAbsolutePath());
@@ -114,6 +143,11 @@ public class Task {
         }
     }
 
+    /**
+     * Метод вызывается без аргументов, так как все необходимые данные передаются в класс в конструкторе. Этот метод запускает выполнение
+     * задач: сначала вызывает метод makesFilesToCopy(), чтобы получить списко файлов для копирования. Затем вызывает метод doOperations,
+     * который и контролирует выполнение копирования и удаления файлов из исходной директории.
+     */
     public void copyFiles() {
         List<File> filesToCopy = makeFilesToCopy(sourceDir);
         doOperations(filesToCopy, targetDirList);

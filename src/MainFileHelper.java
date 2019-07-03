@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Это main класс, он стартует со стартом приложения. Этот класс контролирует работу программы. Запускает диалог с пользователем,
+ * собирает данные для создание инстанса Task и запускает его метод copyFiles(), чтобы скопировать и по необходимости удалить файлы из
+ * исходной директории.
+ */
 public class MainFileHelper {
     private static final Logger LOGGER = Logger.getLogger(MainFileHelper.class.getName());
     private static List<Task> tasks = new ArrayList<>();
@@ -15,12 +20,26 @@ public class MainFileHelper {
     private static boolean askQuestions = true;
     private static String ver = "0.022";
 
+    /**
+     * В этом блоке вызывается статический метод configureLog() класса LogConfigurator, для того, чтобы настроить логгер.
+     */
     static {
         LogConfigurator.configureLog();
     }
 
+    /**
+     * Метод main(), запускается при старте программы. Этот метод контролирует работу программы. Запускает диалог с пользователем,
+     * собирает данные для создание инстанса Task и запускает его метод copyFiles(), чтобы скопировать и по необходимости удалить файлы из
+     * исходной директории.
+     */
     public static void main(String... args) {
         LOGGER.log(Level.INFO, "Start the program. Check the arguments.");
+
+        /**
+         * При запуске программы этот блок проверяет аргументы метода main() и передает управление методу setArguments() класса ConfigurationFileStarter для
+         * обработки настроек из файла configurationFile, если при запуске приложения получен аргумент -с.
+         * Если получен другой аргумент управление передается методу setArguments() класса ArgumentStarter, для обработки настроек из аргументов коммандной строки.
+         */
         if (args.length > 0 && args[0].equals("-c")) {
             askQuestions = false;
             ConfigurationFileStarter.setArguments(new File("configurationFile.txt"));
@@ -31,11 +50,14 @@ public class MainFileHelper {
 
         LOGGER.log(Level.INFO, "Start the program. Begin a dialog with the user.");
 
+        /**
+         * Заготовка для комментария
+         */
         boolean check = true;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String tmp = "";
         if (askQuestions) {
-            System.out.println("Привет, это приложение File Helper ver. "+ver+" скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
+            System.out.println("Привет, это приложение File Helper ver. " + ver + " скопирует файлы jpg с ключами и их eps-пары в одну или несколько директорий.\n" +
                     "Если в целевых директориях уже есть файлы с именами, совпадающими с копируемыми файлами, эти файлы будут просто перезаписаны.\n" +
                     "Никаких уведомлений в этом случае показано не будет.\n" +
                     "При необходимости исходные файлы могут быть удалены.\n" +
@@ -44,13 +66,19 @@ public class MainFileHelper {
                     "Отвечать на вопросы программы можно используя клвиши Y в значении ДА и N в значении НЕТ,\n" +
                     "также допустимо использование строчных символов y и n.\n");
         }
+
+        /**
+         * Заготовка для комментария
+         */
         do {
             File sourceDir;
             List<File> targetDirList = new ArrayList<>();
-
-
             check = true;
 
+            /**
+             * Блок ниже запрашивает и проверяет на доступность целевую директорию - директорию из которой необходимо скопировать файлы.
+             * Запрос директории происходит в цикле, так что если директория не доступна или не существует, цикл запросит директорию еще раз.
+             */
             do {
                 System.out.println("Запрашиваю директорию, файлы из которой необходимо обработать");
                 if (askQuestions) {
@@ -69,6 +97,11 @@ public class MainFileHelper {
                 }
             } while (check);
 
+            /**
+             * Блок ниже запрашивает и проверяет на доступность директории в которые необходимо скорпировать файлы.
+             * Запрос директории происходит в цикле, так что если директория не доступна или не существует, цикл запросит директорию еще раз.
+             * Также цикл будет запрашивать новые целевые директории до тех пор пока не получит в ответ N или n.
+             */
             check = true;
             do {
                 tmp = "";
@@ -99,6 +132,10 @@ public class MainFileHelper {
                 }
             } while (check);
 
+            /**
+             * Блок ниже запрашивает необходимость удаления файлов. Ожидается, что ответ будет Y/y в случае, если файлы нужно удалить
+             * и N/n, если файлы удалять не нужно. Запрос посходит в цикле, так что если получен иной ответ, цикл повторит вопрос.
+             */
             check = true;
             do {
                 tmp = "";
@@ -120,9 +157,17 @@ public class MainFileHelper {
                 }
             } while (check);
 
-            tasks.add(new Task(sourceDir,targetDirList,del));
-            LOGGER.log(Level.INFO,"Task was added to task list");
+            /**
+             * В блоке ниже создается новая задача в конструктор которй передается целевая директория, список целевых директорий и переменая
+             * del, которая указывает на необходимость удаления файлов из целевой директории. Затем новая задача добавляется в список tasks.
+             */
+            tasks.add(new Task(sourceDir, targetDirList, del));
+            LOGGER.log(Level.INFO, "Task was added to task list");
 
+            /**
+             * Блок ниже запрашивает, нужно ли сформировать дополнительные задачи. И если нет - передает управление следующему блоку,
+             * а если да, то возвращает управление в начало цикла, блоку запрашивающему целевую директорию.
+             */
             check = true;
             do {
                 tmp = "";
@@ -152,6 +197,10 @@ public class MainFileHelper {
 
         } while (running);
 
+        /**
+         * Следующий блок для каждого элемента task листа tasks, вызывает метод copyFiles(), чтобы запустить выполнение task копирования и
+         * удаления файлов.
+         */
         LOGGER.log(Level.INFO, "Start copying files");
         System.out.println("Проводятся запрошенные операции...");
         for (Task task : tasks) {
@@ -162,6 +211,9 @@ public class MainFileHelper {
         LOGGER.log(Level.INFO, "End the program");
     }
 
+    /**
+     * Метод получает BufferedReader в качестве аргумента, считывает и возвращает строку из System.in.
+     */
     private static String readLine(BufferedReader reader) {
         try {
             return reader.readLine();
