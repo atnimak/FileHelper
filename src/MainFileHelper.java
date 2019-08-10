@@ -18,7 +18,7 @@ public class MainFileHelper {
     private static boolean del = false;
     private static boolean running = true;
     private static boolean askQuestions = true;
-    private static String ver = "0.030";
+    private static String ver = "0.031";
 
     /**
      * В этом блоке вызывается статический метод configureLog() класса LogConfigurator, для того, чтобы настроить логгер.
