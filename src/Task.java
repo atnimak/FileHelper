@@ -47,7 +47,7 @@ public class Task {
         List<File> files = Arrays.asList(sourceDir.listFiles());
         for (File file : files) {
             if (!file.isDirectory() && file.getName().toLowerCase().endsWith(".jpg")) {
-                String s = KeywordsReader.metadataReader(file.getAbsolutePath());
+                String s = KeywordsReader.readMetadata(file.getAbsolutePath());
                 s = s.replaceAll("XP Keywords \\s+ : ", "").trim();
                 if (!s.isEmpty()) {
                     filesToCopy.add(file);
