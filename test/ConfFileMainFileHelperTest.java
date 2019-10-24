@@ -17,9 +17,9 @@ public class ConfFileMainFileHelperTest {
     /**
      * Переменные с количеством файлов в тестовых папках
      */
-    private static int sourceDirLengthBefore = 32;
+    private static int sourceDirLengthBefore = 216;//32
     private static int sourceDirLengthAfter = 4;
-    private static int targetDirLengthAfter = 28;
+    private static int targetDirLengthAfter = 212;//28
     private static File configurationFile = new File("configurationFile.txt");
     private static String argument = "-c";
 

@@ -2,9 +2,9 @@ public class bigMainFileHelperTest extends MainFileHelperTest {
     /**
      * Создаем переменные с количеством файлов в тестовых папках. До и после работы программы
      */
-    private static int sourceDirLengthBefore = 2088;
+    private static int sourceDirLengthBefore = 2182;//2088
     private static int sourceDirLengthAfter = 178;
-    private static int targetDirLengthAfter = 1910;
+    private static int targetDirLengthAfter = 2004;//1910
 
     /**
      * Создаем переменные с тестовыми папками

@@ -2,6 +2,7 @@ import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 
 import java.io.File;
@@ -36,15 +37,15 @@ public class KeywordsReader {
             LOGGER.log(Level.WARNING, "KeywordsReader.class: readMetadata While reading metadata from file " + file.getAbsolutePath() + " an error occurred!\n" + e.getStackTrace());
         }
         List<Directory> directoryList = (List<Directory>) metadata.getDirectories();
-        result = checkWindowsKeywords(directoryList);
+        result = checkKeywords(directoryList);
         return result;
     }
 
     /**
      * Метод проверяет EXIF tag WindowsXP keywords
      */
-    public static String checkWindowsKeywords(List<Directory> tagList) {
-        LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkWindowsKeywords");
+    public static String checkKeywords(List<Directory> tagList) {
+        LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkKeywords");
         String result = null;
         for (Directory dir : tagList) {
             if (dir.getName().equals("Exif IFD0")) {
@@ -52,11 +53,25 @@ public class KeywordsReader {
                 break;
             }
         }
+
+        if(result == null){
+            for(Directory dir : tagList){
+                if(dir.getName().equals("IPTC")){
+                    for(Tag tag: dir.getTags()){
+                        if(tag.getTagName().equals("Keywords")){
+                            result = tag.getDescription();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         if (result == null) {
             result = new String();
-            LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkWindowsKeywords There are no keywords in this file!");
+            LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkKeywords There are no keywords in this file!");
         }else {
-            LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkWindowsKeywords Keywords in the file were found!");
+            LOGGER.log(Level.CONFIG, "KeywordsReader.class: checkKeywords Keywords in the file were found!");
         }
         return result;
     }
